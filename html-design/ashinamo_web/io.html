@@ -1,0 +1,222 @@
+<html>
+   <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Ashinamo</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script language="javascript" type="text/javascript" src="plugin/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="plugin/jquery.flot.js"></script>
+    <link href="plugin/memory/c3-b03125fa.css" media="screen" rel="stylesheet" type="text/css">
+    <script>
+    $(function(){
+        var localhref = window.location.pathname; 
+        $('.anavbar').each(function(){
+            if($(this).attr('href') == localhref){
+                $(this).parent().addClass('active')
+            }
+        });
+
+    });
+    </script>
+    <style>
+    .col-md-3{
+        width: 25%; 
+    }
+    </style>
+</head>
+<body>
+    <!--content start-->
+    <div class="container">
+        <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a class="anavbar" href="index.html">Ashinamo</a></li>
+              <li><a class="anavbar" href="cpu.html">Cpu</a></li>
+              <li><a class="anavbar" href="mem.html">Memory</a></li>
+              <li class="active"><a class="anavbar" href="io.html">IO</a></li>
+              <li><a class="anavbar" href="net.html">NetWork</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+      <div class="panel panel-default">
+        
+    <script type="text/javascript">
+         $(function() {
+
+             // We use an inline data source in the example, usually data would
+             // be fetched from a server
+
+             var readdata = [],
+                 totalPoints = 300;
+            var writedata = [];
+
+             function getData() {
+                 if (readdata.length > 0){
+                     readdata = readdata.slice(1);
+                     writedata = writedata.slice(1);
+                 }
+
+                 // Do a random walk
+
+                 while (readdata.length < totalPoints) {
+                     var prevx = readdata.length > 0 ? readdata[readdata.length - 1] : 50,
+                         x = prevx + Math.random() * 10 - 5;
+
+                     if (x < 0) {
+                         x = 0;
+                     } else if (x > 200) {
+                        x = 200;
+                     }
+
+                     var prevy = writedata.length > 0 ? writedata[writedata.length - 1] : 50,
+                         y = prevy + Math.random() * 10 - 5;
+
+                     if (y < 0) {
+                         y = 0;
+                     } else if (y > 200) {
+                         y = 200;
+                     }
+                     readdata.push(x);
+                     writedata.push(y);
+                 }
+
+                 // Zip the generated y values with the x values
+
+                 var readres = [];
+                 var writeres = [];
+                 for (var i = 0; i < readdata.length; ++i) {
+                     readres.push([i, readdata[i]])
+                 }
+                 for (var i = 0; i < writedata.length; ++i) {
+                     writeres.push([i, writedata[i]])
+                 }
+
+                 return [{label: 'READ', data: readres},{label: 'WRITE', data: writeres}];
+             }
+
+             // Set up the control widget
+
+             var updateInterval = 1000;
+
+             var plot = $.plot("#placeholder", getData() , {
+                 series: {
+                     shadowSize: 0   // Drawing is faster without shadows
+                 },
+                 yaxis: {
+                     min: 0,
+                     max: 500,
+                     tickFormatter: function suffixFormat(val, axis){
+                        return val.toFixed(axis.tickDecimals) + " MB";
+                     }
+                 },
+                 xaxis: {
+                     show: false
+                 }
+             });
+              function update() {
+
+                 plot.setData(getData());
+
+                 // Since the axes don't change, we don't need to call plot.setupGrid()
+
+                 plot.draw();
+                 setTimeout(update, updateInterval);
+             }
+
+             update();
+
+             // Add the Flot version string to the footer
+
+             $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+         });
+    </script>
+       <div class="panel-heading">Io</div>
+        <div class="panel-body">
+            <p>I/O输入/输出(Input/Output),分为IO设备和IO接口两个部分。 在POSIX兼容的系统上，例如Linux系统，I/O操作可以有多种方式，比如DIO(Direct I/O),AIO(Asynchronous I/O 异步I/O),Memory-Mapped I/O(内存映设I/O)等，不同的I/O方式有不同的实现 方式和性能，在不同的应用中可以按情况选择不同的I/O方式。</p>
+            <div class="col-md-12"><hr /></div>
+               <div class="col-md-12" style="height:350px;margin:0;padding:0;">
+                <div id="placeholder" style="width:100%;height:100%;line-height:1.2em;"></div>
+               </div>
+        </div>
+
+
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <h2 class="text-center">Cpu</h2>
+          <p>中央处理器（CPU，Central Processing Unit）是一块超大规模的集成电路，是一台计算机的运算核心（Core）和控制核心（ Control Unit）。它的功能主要是解释计算机指令以及处理计算机软件中的数据。</p>
+          <p>中央处理器主要包括运算器（算术逻辑运算单元，ALU，Arithmetic Logic Unit）和高速缓冲存储器（Cache）及实现它们之间联系的数据（Data）、控制及状态的总线（Bus）。它与内部存储器（Memory）和输入/输出（I/O）设备合称为电子计算机三大核心部件。</p>
+          <p><a class="btn btn-primary btn-block" href="/cpu/" role="button">View</a></p>
+        </div>
+        <div class="col-md-3">
+          <h2 class="text-center">Memory</h2>
+          <p>内存是计算机中重要的部件之一，它是与CPU进行沟通的桥梁。计算机中所有程序的运行都是在内存中进行的，因此内存的性能对计算机的影响非常大。</p>
+          <p>内存(Memory)也被称为内存储器，其作用是用于暂时存放CPU中的运算数据，以及与硬盘等外部存储器交换的数据。只要计算机在运行中，CPU就会把需要运算的数据调到内存中进行运算，当运算完成后CPU再将结果传送出来，内存的运行也决定了计算机的稳定运行。 内存是由内存芯片、电路板、金手指等部分组成的。</p>
+          <p><a class="btn btn-primary btn-block" href="/mem/" role="button">View</a></p>
+       </div>
+        <div class="col-md-3">
+          <h2 class="text-center">IO</h2>
+          <p>I/O输入/输出(Input/Output),分为IO设备和IO接口两个部分。 在POSIX兼容的系统上，例如Linux系统，I/O操作可以有多种方式，比如DIO(Direct I/O),AIO(Asynchronous I/O 异步I/O),Memory-Mapped I/O(内存映设I/O)等，不同的I/O方式有不同的实现 方式和性能，在不同的应用中可以按情况选择不同的I/O方式。</p>
+          <p>不同的I/O方式有不同的方式和性能，在不同的应用中可以按情况选择不同的I/O方式。</p>
+          <p><a class="btn btn-primary btn-block" href="/io/" role="button">View</a></p>
+        </div>
+        <div class="col-md-3">
+          <h2 class="text-center">NetWork</h2>
+          <p>在计算机领域中，网络是信息传输、接收、共享的虚拟平台，通过它把各个点、面、体的信息联系到一起，从而实现这些资源的共享。网络是人类发展史来最重要的发明，提高了科技和人类社会的发展。</p>
+          <p>从逻辑功能上看，计算机网络是以传输信息为基础目的，用通信线路将多个计算机连接起来的计算机系统的集合，一个计算机网络组成包括传输介质和通信设备。关于计算机网络的最简单定义是：一些相互连接的、以共享资源为目的的、自治的计算机的集合。</p>
+          <p><a class="btn btn-primary btn-block" href="/net/" role="button">View</a></p>
+        </div>
+      </div>
+
+    </div>
+    <!--content end-->
+    <!--footer start-->
+    <!--div class="container-fluid">
+    </div-->
+    <div class="container-fluid" style="border-top:1px solid #e7e7e7;margin-top:2em;">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6 col-md-6">
+            <h1><a href="http://www.pythonpie.com/" style="text-decoration:none;">Pythonpie</a></h1>
+          </div>
+          <div class="col-sm-6  col-md-5 col-md-offset-1">
+            <div class="row about">
+              <div class="col-xs-6 pull-right text-right">
+                <h4>About</h4>
+                <ul class="list-unstyled">
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </div>
+              <div class="col-xs-6 pull-right text-right">
+                <h4>Contact</h4>
+                <ul class="list-unstyled">
+                  <li><a href="#" title="pythonpie" target="_blank">sina</a></li>
+                  <li><a href="mailto:contact@pythonpie.com">email</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <ul class="list-inline text-center">
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--footer end-->
+</body>
+</html>
