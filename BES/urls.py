@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^data/', include('BES.appdata.urls')),
 ]
 
-
+handler404 = "login.views.page_not_found"
+handler500 = "login.views.page_error"

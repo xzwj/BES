@@ -35,3 +35,9 @@ def net(request):
     }
     return render_to_response("net.html", context)
 
+def page_not_found(request):
+    return render_to_response('404.html')
+
+def page_error(request):
+    return render_to_response('500.html')
+
